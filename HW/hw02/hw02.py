@@ -11,6 +11,14 @@ increment = lambda x: x + 1
 
 HW_SOURCE_FILE=__file__
 
+def summation(n,term):
+    k=1
+    sum=0
+    while(k<=n):
+        sum+=term(k)
+        k+=1
+    return sum
+
 
 def product(n, term):
     """Return the product of the first n terms in a sequence.
@@ -32,6 +40,13 @@ def product(n, term):
     162
     """
     "*** YOUR CODE HERE ***"
+    k=1
+    sum=1
+    while(k<=n):
+        sum*=term(k)
+        k+=1    
+    return sum
+        
 
 
 def accumulate(fuse, start, n, term):
@@ -54,7 +69,11 @@ def accumulate(fuse, start, n, term):
     19
     """
     "*** YOUR CODE HERE ***"
-
+    k=1
+    while(k<=n):
+        start=fuse(term(k),start)
+        k+=1
+    return start
 
 def summation_using_accumulate(n, term):
     """Returns the sum: term(1) + ... + term(n), using accumulate.
@@ -68,8 +87,7 @@ def summation_using_accumulate(n, term):
     >>> [type(x).__name__ for x in ast.parse(inspect.getsource(summation_using_accumulate)).body[0].body]
     ['Expr', 'Return']
     """
-    return ____
-
+    return accumulate(add,0,n,term)
 
 def product_using_accumulate(n, term):
     """Returns the product: term(1) * ... * term(n), using accumulate.
@@ -83,8 +101,7 @@ def product_using_accumulate(n, term):
     >>> [type(x).__name__ for x in ast.parse(inspect.getsource(product_using_accumulate)).body[0].body]
     ['Expr', 'Return']
     """
-    return ____
-
+    return accumulate(mul,1,n,term)
 
 def make_repeater(f, n):
     """Returns the function that computes the nth application of f.
@@ -100,4 +117,12 @@ def make_repeater(f, n):
     390625
     """
     "*** YOUR CODE HERE ***"
+    def make(x):
+        k=1
+        while(k<=n):
+            x=f(x)
+            k+=1
+        return x
+    return make
+        
 
