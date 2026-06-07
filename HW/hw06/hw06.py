@@ -50,6 +50,10 @@ class VendingMachine:
     def __init__(self, product, price):
         """Set the product and its price, as well as other instance attributes."""
         "*** YOUR CODE HERE ***"
+        self.product=product
+        self.price=price
+        self.number=0
+        self.balance=0
 
     def restock(self, n):
         """Add n to the stock and return a message about the updated stock level.
@@ -57,6 +61,8 @@ class VendingMachine:
         E.g., Current candy stock: 3
         """
         "*** YOUR CODE HERE ***"
+        self.number+=n
+        return f'Current {self.product} stock: {self.number}'
 
     def add_funds(self, n):
         """If the machine is out of stock, return a message informing the user to restock
@@ -69,6 +75,11 @@ class VendingMachine:
         E.g., Current balance: $4
         """
         "*** YOUR CODE HERE ***"
+        if self.number==0:
+            return f'Nothing left to vend. Please restock. Here is your ${n}.'
+        else:
+            self.balance+=n
+            return f'Current balance: ${self.balance}'
 
     def vend(self):
         """Dispense the product if there is sufficient stock and funds and
@@ -82,6 +93,20 @@ class VendingMachine:
               Please add $3 more funds.
         """
         "*** YOUR CODE HERE ***"
+        if self.number!=0 and self.balance>=self.price:
+            self.number-=1
+            j=self.balance-self.price
+            self.balance=0
+            if j!=0:
+                return f'Here is your {self.product} and ${j} change.'
+            else:
+                return f'Here is your {self.product}.'
+        
+        else:
+            if self.number==0:
+                return f'Nothing left to vend. Please restock.'
+            elif self.balance<self.price:
+                return f'Please add ${self.price-self.balance} more funds.'
 
 
 def store_digits(n):
@@ -105,6 +130,18 @@ def store_digits(n):
     """
     "*** YOUR CODE HERE ***"
 
+    result=Link.empty
+    while n>0:
+        result=Link(n%10,result)
+        n//=10
+    return result
+
+        
+
+        
+
+        
+        
 
 def deep_map_mut(func, s):
     """Mutates a deep link s by replacing each item found with the
@@ -126,6 +163,14 @@ def deep_map_mut(func, s):
     <9 <16> 25 36>
     """
     "*** YOUR CODE HERE ***"
+    if s==Link.empty:
+        return 
+    else:
+        if isinstance(s.first,Link):
+            deep_map_mut(func,s.first)
+        else:
+            s.first=func(s.first)
+    deep_map_mut(func,s.rest)
 
 
 def two_list(vals, counts):
@@ -147,6 +192,24 @@ def two_list(vals, counts):
     Link(1, Link(1, Link(3, Link(3, Link(2)))))
     """
     "*** YOUR CODE HERE ***"
+    if not vals:
+        return Link.empty
+    else:
+        result=two_list(vals[1:],counts[1:])
+ 
+        for _ in range(counts[0]):
+            result=Link(vals[0],result)
+    return result
+            
+            
+    """result=Link.empty
+    j=len(vals)
+    for i in range(j):
+        for _ in range(counts[j-i-1]): 
+            result=Link(vals[j-i-1],result)
+    return result"""
+        
+
 
 
 class Link:
