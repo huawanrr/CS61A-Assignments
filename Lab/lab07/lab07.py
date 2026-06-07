@@ -40,6 +40,13 @@ class Account:
         """Return the number of years until balance would grow to amount."""
         assert self.balance > 0 and amount > 0 and self.interest > 0
         "*** YOUR CODE HERE ***"
+        b=self.balance
+        i=0
+        while b<amount:
+            b=b*(1+self.interest)
+            i+=1
+        return i
+            
 
 
 class FreeChecking(Account):
@@ -70,6 +77,26 @@ class FreeChecking(Account):
     free_withdrawals = 2
 
     "*** YOUR CODE HERE ***"
+    def withdraw(self, amount):
+        if self.free_withdrawals>0:
+            if amount > self.balance:
+              self.free_withdrawals-=1
+              return "Insufficient funds"
+            if amount > self.max_withdrawal:
+              self.free_withdrawals-=1
+              return "Can't withdraw that amount"
+            self.free_withdrawals-=1
+            self.balance = self.balance - amount
+            return self.balance
+        else:
+            if amount+self.withdraw_fee > self.balance:
+              return "Insufficient funds"
+            if amount > self.max_withdrawal:
+              return "Can't withdraw that amount"
+        self.balance = self.balance - amount-self.withdraw_fee
+        return self.balance
+            
+       
 
 
 def without(s, i):
@@ -86,6 +113,15 @@ def without(s, i):
     True
     """
     "*** YOUR CODE HERE ***"
+    if s is Link.empty:
+        return s
+    elif i==0:
+        return s.rest
+    else:
+        return Link(s.first,without(s.rest,i-1))
+        
+        
+    
 
 
 def duplicate_link(s, val):
@@ -105,6 +141,17 @@ def duplicate_link(s, val):
     Link(1, Link(2, Link(2, Link(2, Link(2, Link(3))))))
     """
     "*** YOUR CODE HERE ***"
+    if s is Link.empty:
+        return 
+        
+        
+    elif s.first!=val:
+         duplicate_link(s.rest,val)
+    else:
+        s.rest=Link(val,s.rest)
+
+        duplicate_link(s.rest.rest,val)
+        
 
 
 class Link:
@@ -147,4 +194,5 @@ class Link:
             string += str(self.first) + ' '
             self = self.rest
         return string + str(self.first) + '>'
+    
 
